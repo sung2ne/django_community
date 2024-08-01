@@ -1,5 +1,19 @@
 # 커뮤니티
 
+## 설계서
+
+### 기능정의서
+
+https://docs.google.com/spreadsheets/d/1xMwlDxmaywGRRVoxxf2bHff16j4UEdqjC89XH39eRCY/edit?usp=sharing
+
+### 업무흐름도
+
+https://drive.google.com/file/d/1dSEk7DJ0WyJhBFN6cKgHb4YXRaXPa89S/view?usp=sharing
+
+### 테이블 정의서
+
+https://docs.google.com/spreadsheets/d/1Om3nOSNgWOYZ4eDkAw1gfjCWwQCUZWJOhsFzYw6YHfw/edit?usp=sharing
+
 ## 프로젝트 만들기
 
 ### 장고 설치
