@@ -1,9 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 {% if error_message %}
 <div class="alert alert-danger" role="alert">{{ error_message }}</div>
 {% endif %}
+
+{% if message %}
+<div class="alert alert-success" role="alert">{{ message }}</div>
+{% endif %}
+
 <form id="loginForm" action="{% url 'common:login' %}" method="post">
     {% csrf_token %}
     {{ form.as_p }}
