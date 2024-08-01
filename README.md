@@ -36,6 +36,10 @@ mysite/mysite/settings.py
 2. 시간
 3. 템플릿 디렉터리 설정
 
+### templates 폴더 만들기
+
+mysite/templates
+
 ### 마이그레이션
 
 ```bash
