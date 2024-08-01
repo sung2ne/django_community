@@ -4,7 +4,7 @@
 {% if error_message %}
 <div class="alert alert-danger" role="alert">{{ error_message }}</div>
 {% endif %}
-<form id="registerForm">
+<form id="registerForm" action="{% url 'common/register' %}" method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="btn btn-primary">회원 가입</button>
@@ -16,19 +16,25 @@
     $('#registerForm').on('submit', function() {
         let username = $('#username');
         let password = $('#password');
+        let fist_name = $('#fist_name');
+        let email = $('#email');
 
         if (username.val() == '') {
-            alert('username을 입력하세요.');
+            alert('아이디를 입력하세요.');
             username.focus();
             return false;
         } else if (password.val() == '') {
-            alert('password를 입력하세요.');
+            alert('비밀번호를 입력하세요.');
             password.focus();
             return false;
-        } else {
-            $('#registerForm').attr('action', '/common/login/');
-            $('#registerForm').attr('method', 'post');
-            $('#registerForm').submit();
+        } else if (fist_name.val() == '') {
+            alert('이름을 입력하세요.');
+            fist_name.focus();
+            return false;
+        } else if (email.val() == '') {
+            alert('이메일을 입력하세요.');
+            email.focus();
+            return false;
         }
     });
 </script>
