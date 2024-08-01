@@ -1,5 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
+from common.forms import LoginForm
+from django.contrib.auth import logout, authenticate, login
 
 
 # 메인 화면
@@ -9,20 +11,38 @@ def main_page(request):
     
 # /common/login/
 def common_login(request):
-    if request["method"] == "POST":
+    # 템플릿으로 넘겨줄 정보
+    context = {}
+        
+    if request.method == "POST":
+        # 로그인 폼
+        form = LoginForm(request.POST)
+        
         # 넘어온 값 검증
+        if form.is_valid():
+            login_cd = form.cleaned_data
+            
+            # 아이디에 해당하는 사용자 정보 조회
+            user = authenticate(request, username=login_cd["username"], password=login_cd["password"])
+            
+            # 사용자 유무 확인    
+            if user is None:
+                context["form"] = form
+                context["error_message"] = "아이디를 확인하세요."
+                return render(request, "common/login.html", context)
+                
+            # 비밀번호 검증
+            if not user.is_authenticated:
+                context["form"] = form
+                context["error_message"] = "비밀번호를 확인하세요."
+                return render(request, "common/login.html", context)
         
-        # 아이디에 해당하는 사용자 정보 조회
-
-        # 사용자 유무 확인
-        
-        # 비밀번호 검증
-        
-        # 인증정보(세션) 생성
-        
+        # 메인 화면으로 이동
         return redirect("main_page")
         
-    context = {}
+    # 로그인 폼
+    form = LoginForm()
+    context["form"] = form
     return render(request, "common/login.html", context)
     
 # /common/logout/
