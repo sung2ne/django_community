@@ -65,3 +65,18 @@ mysite/common/views.py
 사용할 URL 연결
 mysite/common/urls.py
 mysite/mysite/urls.py
+
+### 템플릿 만들기
+
+mysite/templates/base.html
+mysite/templates/common/main.html
+mysite/templates/common/login.html
+mysite/templates/common/profile.html
+mysite/templates/common/register.html
+mysite/templates/common/find_username.html
+mysite/templates/common/reset_password.html
+
+### 메인 화면 만들기
+
+mysite/templates/common/main.html
+
