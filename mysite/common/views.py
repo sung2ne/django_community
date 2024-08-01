@@ -94,6 +94,7 @@ def common_register(request):
                 email=register_cd["email"]
             )
             
+            context["form"] = LoginForm()
             context["message"] = "사용자를 추가하였습니다. 로그인을 해주세요."
             return render(request, "common/login.html", context)
         else:
