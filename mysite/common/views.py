@@ -47,7 +47,8 @@ def common_login(request):
     
 # /common/logout/
 def common_logout(request):
-    return HttpResponse('/common/logout/')
+    logout(request)
+    return redirect("main_page")
     
 # /common/profile/
 def common_profile(request):

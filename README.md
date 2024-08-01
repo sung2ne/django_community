@@ -80,3 +80,19 @@ mysite/templates/common/reset_password.html
 
 mysite/templates/common/main.html
 
+### 로그인 만들기
+
+mysite/tempates/common/login.html
+mysite/common/forms.py
+mysite/common/views.py
+
+### 로그아웃 만들기
+
+mysite/common/views.py
+
+### 회원가입 만들기
+
+mysite/tempates/common/register.html
+mysite/common/forms.py
+mysite/common/views.py
+
