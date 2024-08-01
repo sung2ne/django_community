@@ -15,30 +15,48 @@
     </head>
     <body>
         <!-- navbar -->
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">Todo</a>
-                <div class="d-flex">
-                    <div class="collapse navbar-collapse">
-                        <ul class="navbar-nav">
+        <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+            <div class="container">
+                <a class="navbar-brand" href="#">커뮤니티</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarText">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">게시판</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav d-flex">
+                        <!-- 환영 인사 -->
+                        {% if user.is_authenticated %}
+                        <li class="nav-item" style="margin-right: 20px;">
+                            {{ user }}님 반갑습니다.
+                        </li>
+                        <li class="nav-item" style="margin-right: 20px;">
+                            <a class="nav-link" href="{% url 'common:profile' %}">프로필</a>
+                        </li>
+                        {% endif %}
+                        <!--//  환영 인사 -->
+
+                        <!-- 로그인/로그아웃 -->
+                        <li class="nav-item">
                             {% if user.is_authenticated %}
-                            <li class="nav-item" style="margin-right: 20px;">
-                                {{ user }}님 반갑습니다.
-                            </li>
-                            <li class="nav-item" style="margin-right: 20px;">
-                                <a href="/common/profile/">프로필</a>
-                            </li>
+                                <a class="nav-link" href="{% url 'common:logout' %}">로그아웃</a>
+                            {% else %}
+                                <a class="nav-link" href="{% url 'common:login' %}">로그인</a>
                             {% endif %}
-                            <li class="nav-item">
-                                {% if user.is_authenticated %}
-                                    <a href="/common/logout/">로그아웃</a>
-                                {% else %}
-                                    <a href="/common/login/">로그인</a>
-                                {% endif %}
-                            </li>
-                        </ul>
-                    </div>
-                    
+                        </li>
+                        <!--// 로그인/로그아웃 -->
+
+                        <!-- 회원가입 -->
+                        {% if not user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'common:register' %}">회원가입</a>
+                        </li>
+                        {% endif %}
+                        <!--// 회원가입 -->
+                    </ul>
                 </div>
             </div>
         </nav>

@@ -1,7 +1,35 @@
+{% extends 'base.html' %}
+
 {% block content %}
+{% if error_message %}
+<div class="alert alert-danger" role="alert">{{ error_message }}</div>
+{% endif %}
+<form id="registerForm">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">회원 가입</button>
+</form>
 {% endblock %}
 
 {% block script %}
 <script>
+    $('#registerForm').on('submit', function() {
+        let username = $('#username');
+        let password = $('#password');
+
+        if (username.val() == '') {
+            alert('username을 입력하세요.');
+            username.focus();
+            return false;
+        } else if (password.val() == '') {
+            alert('password를 입력하세요.');
+            password.focus();
+            return false;
+        } else {
+            $('#registerForm').attr('action', '/common/login/');
+            $('#registerForm').attr('method', 'post');
+            $('#registerForm').submit();
+        }
+    });
 </script>
 {% endblock %}

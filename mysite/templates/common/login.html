@@ -4,7 +4,7 @@
 {% if error_message %}
 <div class="alert alert-danger" role="alert">{{ error_message }}</div>
 {% endif %}
-<form id="loginForm">
+<form id="loginForm" action="{% url 'common:login' %}" method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="btn btn-primary">로그인</button>
@@ -25,10 +25,6 @@
             alert('password를 입력하세요.');
             password.focus();
             return false;
-        } else {
-            $('#loginForm').attr('action', '/common/login/');
-            $('#loginForm').attr('method', 'post');
-            $('#loginForm').submit();
         }
     });
 </script>
