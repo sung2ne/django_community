@@ -4,7 +4,7 @@
 {% if error_message %}
 <div class="alert alert-danger" role="alert">{{ error_message }}</div>
 {% endif %}
-<form id="registerForm" action="{% url 'common/register' %}" method="post">
+<form id="registerForm" action="{% url 'common:register' %}" method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="btn btn-primary">회원 가입</button>
