@@ -48,7 +48,7 @@ mysite> python manage.py migrate
 ### 애플리케이션 만들기
 
 ```bash
-mysite> django startapp common
+mysite> python manage.py startapp common
 ```
 
 ### view 만들기
