@@ -124,7 +124,7 @@ def common_find_username(request):
             user = User.objects.filter(first_name=cd["first_name"], email=cd["email"])
             
             # 사용자 유무 확인    
-            if user is not None:
+            if user is None:
                 context["form"] = form
                 context["error_message"] = "등록된 사용자가 없습니다."
                 return render(request, "common/find_username.html", context)
