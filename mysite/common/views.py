@@ -22,10 +22,10 @@ def common_login(request):
         
         # 넘어온 값 검증
         if form.is_valid():
-            login_cd = form.cleaned_data
+            cd = form.cleaned_data
             
             # 아이디에 해당하는 사용자 정보 조회
-            user = authenticate(request, username=login_cd["username"], password=login_cd["password"])
+            user = authenticate(request, username=cd["username"], password=cd["password"])
             
             # 사용자 유무 확인    
             if user is None:
@@ -38,6 +38,9 @@ def common_login(request):
                 context["form"] = form
                 context["error_message"] = "비밀번호를 확인하세요."
                 return render(request, "common/login.html", context)
+            
+            # 로그인 처리
+            login(request, user)
         
             # 메인 화면으로 이동
             return redirect("main_page")
@@ -162,7 +165,6 @@ def common_reset_password(request):
             new_password = "1234"
             user[0].set_password(new_password)
             user[0].save()
-            print(user[0].password)
             
             context["new_password"] = new_password
             context["form"] = form

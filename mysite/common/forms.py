@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.utils.safestring import SafeString
 
 # 로그인
-class LoginForm(forms.ModelForm):
+class LoginForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
@@ -12,17 +12,8 @@ class LoginForm(forms.ModelForm):
     def as_div(self):
         return SafeString(super().as_div().replace("<div>", "<div class='mb-3'>"))
     
-    class Meta:
-        model = User
-        fields = ["username", "password"]
-        labels = {
-            "username": "아이디",
-            "password": "비밀번호",
-        }
-        help_texts = {
-            "username": None,
-            "password": None,
-        }
+    username = forms.CharField(label="아이디")
+    password = forms.CharField(label="비밀번호", widget=forms.PasswordInput())
 
 # 회원가입
 class RegisterForm(forms.ModelForm):
