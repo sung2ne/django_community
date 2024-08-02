@@ -1,7 +1,83 @@
+{% extends 'base.html' %}
+
 {% block content %}
+
+{% if error_message %}
+<div class="alert alert-danger" role="alert">{{ error_message }}</div>
+{% endif %}
+
+{% if message %}
+<div class="alert alert-success" role="alert">{{ message }}</div>
+{% endif %}
+
+<div class="card col-md-4">
+    <div class="card-header">
+        아이디 찾기
+    </div>
+    <form id="findUsernameForm" action="{% url 'common:find_username' %}" method="post">
+        {% csrf_token %}
+        <div class="card-body">
+            {{ form.as_div }}
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">아이디 찾기</button>
+        </div>
+    </form>
+</div>
 {% endblock %}
 
 {% block script %}
 <script>
+    $("#findUsernameForm").validate({
+        rules: {
+            first_name: {
+                required: true,
+                minlength: 2,
+                maxlength: 4,
+                messages: {
+                    required: "필수 입력입니다.",
+                    minlength: jQuery.validator.format("2글자 이상, 4글자 이하로 입력해주세요.")
+                },
+            },
+            email: {
+                required: true,
+                email: true,
+                messages: {
+                    required: "필수 입력입니다.",
+                },
+            },
+        },
+        messages: {
+            first_name: {
+                required: "필수 입력입니다.",
+                minlength: jQuery.validator.format("2글자 이상, 4글자 이하로 입력해주세요."),
+                maxlength: jQuery.validator.format("2글자 이상, 4글자 이하로 입력해주세요."),
+            },
+            email: {
+              required: "필수 입력입니다.",
+              email: "올바른 형식의 이메일을 입력하세요."
+            }
+        },
+        submitHandler: function (form) {
+            form.submit();
+        }  
+    });
+
+    /*
+    $('#findUsernameForm').on('submit', function() {
+        let first_name = $('#first_name');
+        let email = $('#email');
+
+        if (first_name.val() == '') {
+            alert('이름을 입력하세요.');
+            first_name.focus();
+            return false;
+        } else if (email.val() == '') {
+            alert('이메일을 입력하세요.');
+            email.focus();
+            return false;
+        }
+    });
+    */
 </script>
 {% endblock %}

@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-from common.forms import LoginForm, RegisterForm
+from common.forms import FindUsernameForm, LoginForm, RegisterForm
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password, check_password
@@ -81,7 +81,7 @@ def common_register(request):
             user = User.objects.filter(username=register_cd["username"])
             
             # 사용자 유무 확인    
-            if user is None:
+            if user is not None:
                 context["form"] = form
                 context["error_message"] = "사용중인 아이디입니다."
                 return render(request, "common/register.html", context)
@@ -106,10 +106,40 @@ def common_register(request):
     form = RegisterForm()
     context["form"] = form
     return render(request, "common/register.html", context)
-    
-# /common/find_username/
+
+# 아이디 찾기
 def common_find_username(request):
-    return HttpResponse('/common/find_username/')
+    # 템플릿으로 넘겨줄 정보
+    context = {}
+        
+    if request.method == "POST":
+        # 아이디 찾기 폼
+        form = FindUsernameForm(request.POST)
+        
+        # 넘어온 값 검증
+        if form.is_valid():
+            cd = form.cleaned_data
+            
+            # 사용자 정보 조회
+            user = User.objects.filter(first_name=cd["first_name"], email=cd["email"])
+            
+            # 사용자 유무 확인    
+            if user is not None:
+                context["form"] = form
+                context["error_message"] = "등록된 사용자가 없습니다."
+                return render(request, "common/find_username.html", context)
+            
+            context["user"] = user
+            return render(request, "common/find_username.html", context)
+        else:
+            context["form"] = form
+            context["error_message"] = "입력정보를 확인하세요."
+            return render(request, "common/find_username.html", context)
+        
+    # 아이디 찾기 폼
+    form = FindUsernameForm()
+    context["form"] = form
+    return render(request, "common/find_username.html", context)
     
 # /common/reset_password/
 def common_reset_password(request):
