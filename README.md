@@ -96,3 +96,21 @@ mysite/tempates/common/register.html
 mysite/common/forms.py
 mysite/common/views.py
 
+### 아이디 찾기 만들기
+
+mysite/tempates/common/find_username.html
+mysite/common/forms.py
+mysite/common/views.py
+
+### 비밀번호 초기화 만들기
+
+mysite/tempates/common/reset_password.html
+mysite/common/forms.py
+mysite/common/views.py
+
+## 프로필 만들기
+
+mysite/tempates/common/profile.html
+mysite/common/forms.py
+mysite/common/views.py
+
