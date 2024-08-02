@@ -143,15 +143,10 @@ def common_reset_password(request):
     if request.method == "POST":
         # 비밀번호 초기화 폼
         form = ResetPasswordForm(request.POST)
-        print(form)
         
         # 넘어온 값 검증
         if form.is_valid():
-            print("3")
             cd = form.cleaned_data
-            print(cd["username"])
-            print(cd["first_name"])
-            print(cd["email"])
             
             # 사용자 정보 조회
             user = User.objects.filter(username=cd["username"], first_name=cd["first_name"], email=cd["email"])
@@ -174,10 +169,7 @@ def common_reset_password(request):
             context["success_message"] = "비밀번호를 초기화했습니다."
             return render(request, "common/reset_password.html", context)
             
-        
     # 비밀번호 초기화 폼
-    print("5")
     form = ResetPasswordForm()
-    print(form)
     context["form"] = form
     return render(request, "common/reset_password.html", context)
