@@ -76,3 +76,25 @@ class ResetPasswordForm(forms.Form):
     username = forms.CharField(label="아이디")
     first_name = forms.CharField(label="이름")
     email = forms.EmailField(label="이메일")
+    
+# 정보 수정
+class ProfileForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ProfileForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs["class"] = "form-control"
+
+    def as_div(self):
+        return SafeString(super().as_div().replace("<div>", "<div class='mb-3'>"))
+    
+    class Meta:
+        model = User
+        fields = ["first_name", "email"]
+        labels = {
+            "first_name": "이름",
+            "email": "이메일",
+        }
+        help_texts = {
+            "first_name": None,
+            "email": None,
+        }

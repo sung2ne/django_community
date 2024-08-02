@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-from common.forms import FindUsernameForm, LoginForm, RegisterForm, ResetPasswordForm
+from common.forms import FindUsernameForm, LoginForm, RegisterForm, ResetPasswordForm, ProfileForm
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password, check_password
@@ -61,7 +61,39 @@ def common_logout(request):
     
 # 프로필, /common/profile/
 def common_profile(request):
-    return HttpResponse('/common/profile/')
+    # 템플릿으로 넘겨줄 정보
+    context = {}
+        
+    if request.method == "POST":
+        # 정보 수정 폼
+        form = ProfileForm(request.POST)
+        
+        # 넘어온 값 검증
+        if form.is_valid():
+            cd = form.cleaned_data
+            
+            # 사용자 정보 조회
+            user = User.objects.filter(email=cd["email"])
+            
+            # 사용자 유무 확인    
+            if len(user) > 0:
+                context["profile_form"] = form
+                context["profile_error_message"] = "이미 등록된 이메일입니다."
+                return render(request, "common/profile.html", context)
+            
+            # 사용자 정보 변경
+            request.user.email = cd["email"]
+            request.user.first_name = cd["first_name"]
+            request.user.save()
+            
+            context["profile_form"] = form
+            context["profile_success_message"] = "사용자 정보를 수정하였습니다."
+            return render(request, "common/profile.html", context)
+        
+    # 정보 수정 폼
+    form = ProfileForm()
+    context["profile_form"] = form
+    return render(request, "common/profile.html", context)
     
 # 비밀번호 수정, /common/password/
 def common_password(request):

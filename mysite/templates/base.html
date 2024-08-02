@@ -30,10 +30,10 @@
                     <ul class="navbar-nav d-flex">
                         <!-- 환영 인사 -->
                         {% if user.is_authenticated %}
-                        <li class="nav-item" style="margin-right: 20px;">
-                            {{ user }}님 반갑습니다.
+                        <li class="nav-item">
+                            <span class="nav-link">{{ user.first_name }}님 반갑습니다.</span>
                         </li>
-                        <li class="nav-item" style="margin-right: 20px;">
+                        <li class="nav-item">
                             <a class="nav-link" href="{% url 'common:profile' %}">프로필</a>
                         </li>
                         {% endif %}
