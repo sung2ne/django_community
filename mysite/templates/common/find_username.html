@@ -3,13 +3,16 @@
 {% block content %}
 
 {% if error_message %}
-<div class="alert alert-danger" role="alert">{{ error_message }}</div>
+<div class="alert alert-danger col-md-4" role="alert">{{ error_message }}</div>
 {% endif %}
 
-{% if message %}
-<div class="alert alert-success" role="alert">{{ message }}</div>
-{% endif %}
-
+{% if success_message %}
+<div class="alert alert-success col-md-4" role="alert">
+    <p>{{ success_message }}</p>
+    <span>아이디: {{ find_user.username }}</span>
+</div>
+<a href="{% url 'common:login' %}" class="btn btn-primary">로그인</a>
+{% else %}
 <div class="card col-md-4">
     <div class="card-header">
         아이디 찾기
@@ -24,6 +27,7 @@
         </div>
     </form>
 </div>
+{% endif %}
 {% endblock %}
 
 {% block script %}

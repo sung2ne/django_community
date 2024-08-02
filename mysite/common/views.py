@@ -95,12 +95,8 @@ def common_register(request):
             )
             
             context["form"] = LoginForm()
-            context["message"] = "사용자를 추가하였습니다. 로그인을 해주세요."
+            context["success_message"] = "사용자를 추가하였습니다. 로그인을 해주세요."
             return render(request, "common/login.html", context)
-        else:
-            context["form"] = form
-            context["error_message"] = "입력정보를 확인하세요."
-            return render(request, "common/register.html", context)
         
     # 회원가입 폼
     form = RegisterForm()
@@ -124,16 +120,14 @@ def common_find_username(request):
             user = User.objects.filter(first_name=cd["first_name"], email=cd["email"])
             
             # 사용자 유무 확인    
-            if user is None:
+            if len(user) == 0:
                 context["form"] = form
                 context["error_message"] = "등록된 사용자가 없습니다."
                 return render(request, "common/find_username.html", context)
             
-            context["user"] = user
-            return render(request, "common/find_username.html", context)
-        else:
+            context["find_user"] = user[0]
             context["form"] = form
-            context["error_message"] = "입력정보를 확인하세요."
+            context["success_message"] = "사용자를 찾았습니다."
             return render(request, "common/find_username.html", context)
         
     # 아이디 찾기 폼
