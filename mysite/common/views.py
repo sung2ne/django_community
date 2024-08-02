@@ -116,10 +116,7 @@ def common_password(request):
             request.user.set_password(cd["password"])
             request.user.save()
             
-            context["profile_form"] = ProfileForm(initial={'first_name': request.user.first_name, 'email': request.user.email})
-            context["password_form"] = PasswordForm()
-            context["password_success_message"] = "사용자 비밀번호를 수정하였습니다."
-            return render(request, "common/profile.html", context)
+            return redirect('common:login')
         
     # 비밀번호 수정 폼
     context["profile_form"] = ProfileForm(initial={'first_name': request.user.first_name, 'email': request.user.email})
