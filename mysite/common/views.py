@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-from common.forms import FindUsernameForm, LoginForm, RegisterForm
+from common.forms import FindUsernameForm, LoginForm, RegisterForm, ResetPasswordForm
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password, check_password
@@ -11,7 +11,7 @@ def main_page(request):
     context = {}
     return render(request, "common/main.html", context)
     
-# /common/login/
+# 로그인, /common/login/
 def common_login(request):
     # 템플릿으로 넘겨줄 정보
     context = {}
@@ -51,20 +51,20 @@ def common_login(request):
     context["form"] = form
     return render(request, "common/login.html", context)
     
-# /common/logout/
+# 로그아웃, /common/logout/
 def common_logout(request):
     logout(request)
     return redirect("main_page")
     
-# /common/profile/
+# 프로필, /common/profile/
 def common_profile(request):
     return HttpResponse('/common/profile/')
     
-# /common/password/
+# 비밀번호 수정, /common/password/
 def common_password(request):
     return HttpResponse('/common/password/')    
     
-# /common/register/
+# 회원가입, /common/register/
 def common_register(request):
     # 템플릿으로 넘겨줄 정보
     context = {}
@@ -103,7 +103,7 @@ def common_register(request):
     context["form"] = form
     return render(request, "common/register.html", context)
 
-# 아이디 찾기
+# 아이디 찾기, /common/find_username
 def common_find_username(request):
     # 템플릿으로 넘겨줄 정보
     context = {}
@@ -135,6 +135,49 @@ def common_find_username(request):
     context["form"] = form
     return render(request, "common/find_username.html", context)
     
-# /common/reset_password/
+# 비밀번호 초기화, /common/reset_password/
 def common_reset_password(request):
-    return HttpResponse('/common/reset_password/')
+    # 템플릿으로 넘겨줄 정보
+    context = {}
+        
+    if request.method == "POST":
+        # 비밀번호 초기화 폼
+        form = ResetPasswordForm(request.POST)
+        print(form)
+        
+        # 넘어온 값 검증
+        if form.is_valid():
+            print("3")
+            cd = form.cleaned_data
+            print(cd["username"])
+            print(cd["first_name"])
+            print(cd["email"])
+            
+            # 사용자 정보 조회
+            user = User.objects.filter(username=cd["username"], first_name=cd["first_name"], email=cd["email"])
+            print(user)
+            
+            # 사용자 유무 확인    
+            if len(user) == 0:
+                context["form"] = form
+                context["error_message"] = "등록된 사용자가 없습니다."
+                return render(request, "common/reset_password.html", context)
+            
+            # 비밀번호 초기화
+            new_password = "1234"
+            user[0].set_password(new_password)
+            user[0].save()
+            print(user[0].password)
+            
+            context["new_password"] = new_password
+            context["form"] = form
+            context["success_message"] = "비밀번호를 초기화했습니다."
+            return render(request, "common/reset_password.html", context)
+            
+        
+    # 비밀번호 초기화 폼
+    print("5")
+    form = ResetPasswordForm()
+    print(form)
+    context["form"] = form
+    return render(request, "common/reset_password.html", context)

@@ -4,6 +4,14 @@ from django.utils.safestring import SafeString
 
 # 로그인
 class LoginForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(LoginForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs["class"] = "form-control"
+            
+    def as_div(self):
+        return SafeString(super().as_div().replace("<div>", "<div class='mb-3'>"))
+    
     class Meta:
         model = User
         fields = ["username", "password"]
@@ -15,13 +23,17 @@ class LoginForm(forms.ModelForm):
             "username": None,
             "password": None,
         }
-        widgets = {
-            "username": forms.TextInput(attrs={"class": "form-control"}),
-            "password": forms.PasswordInput(attrs={"class": "form-control"}),
-        }
 
 # 회원가입
 class RegisterForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(RegisterForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs["class"] = "form-control"
+            
+    def as_div(self):
+        return SafeString(super().as_div().replace("<div>", "<div class='mb-3'>"))
+    
     class Meta:
         model = User
         fields = ["username", "password", "first_name", "email"]
@@ -37,13 +49,7 @@ class RegisterForm(forms.ModelForm):
             "first_name": None,
             "email": None,
         }
-        widgets = {
-            "username": forms.TextInput(attrs={"class": "form-control"}),
-            "password": forms.PasswordInput(attrs={"class": "form-control"}),
-            "first_name": forms.TextInput(attrs={"class": "form-control"}),
-            "email": forms.EmailInput(attrs={"class": "form-control"}),
-        }
-
+        
 # 아이디 찾기
 class FindUsernameForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -65,9 +71,47 @@ class FindUsernameForm(forms.ModelForm):
             "first_name": None,
             "email": None,
         }
-        """
-        widgets = {
-            "first_name": forms.TextInput(attrs={"class": "form-control"}),
-            "email": forms.EmailInput(attrs={"class": "form-control"}),
+
+# 비밀번호 초기화
+"""
+class ResetPasswordForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ResetPasswordForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs["class"] = "form-control"
+            
+    def as_div(self):
+        return mark_safe(super().as_div().replace("<div>", "<div class='mb-3'>"))
+            
+    class Meta:
+        model = User
+        fields = ["username", "first_name", "email"]
+        labels = {
+            "username": "아이디",
+            "first_name": "이름",
+            "email": "이메일",
         }
-        """
+        help_texts = {
+            "username": None,
+            "first_name": None,
+            "email": None,
+        }
+"""
+
+class ResetPasswordForm(forms.Form):
+    username = forms.CharField(label="아이디")
+    first_name = forms.CharField(label="이름")
+    email = forms.EmailField(label="이메일")
+    
+    def __init__(self, *args, **kwargs):
+        super(ResetPasswordForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs["class"] = "form-control"
+
+    def as_div(self):
+        return SafeString(super().as_div().replace("<div>", "<div class='mb-3'>"))
+    
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        return cleaned_data
