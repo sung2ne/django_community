@@ -91,7 +91,7 @@ def common_profile(request):
             return render(request, "common/profile.html", context)
         
     # 정보 수정 폼
-    form = ProfileForm()
+    form = ProfileForm(instance=request.user)
     context["profile_form"] = form
     return render(request, "common/profile.html", context)
     
