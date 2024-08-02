@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 def main_page(request):
     context = {}
     return render(request, "common/main.html", context)
-    
+
 # 로그인, /common/login/
 def common_login(request):
     # 템플릿으로 넘겨줄 정보
@@ -117,11 +117,6 @@ def common_password(request):
             request.user.save()
             
             return redirect('common:login')
-        
-    # 비밀번호 수정 폼
-    context["profile_form"] = ProfileForm(initial={'first_name': request.user.first_name, 'email': request.user.email})
-    context["password_form"] = PasswordForm()
-    return render(request, "common/profile.html", context)
     
 # 회원가입, /common/register/
 def common_register(request):
