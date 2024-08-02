@@ -16,7 +16,7 @@ class LoginForm(forms.Form):
     password = forms.CharField(label="비밀번호", widget=forms.PasswordInput())
 
 # 회원가입
-class RegisterForm(forms.ModelForm):
+class RegisterForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
@@ -25,24 +25,13 @@ class RegisterForm(forms.ModelForm):
     def as_div(self):
         return SafeString(super().as_div().replace("<div>", "<div class='mb-3'>"))
     
-    class Meta:
-        model = User
-        fields = ["username", "password", "first_name", "email"]
-        labels = {
-            "username": "아이디",
-            "password": "비밀번호",
-            "first_name": "이름",
-            "email": "이메일",
-        }
-        help_texts = {
-            "username": None,
-            "password": None,
-            "first_name": None,
-            "email": None,
-        }
+    username = forms.CharField(label="아이디")
+    password = forms.CharField(label="비밀번호", widget=forms.PasswordInput())
+    first_name = forms.CharField(label="이름")
+    email = forms.EmailField(label="이메일")
         
 # 아이디 찾기
-class FindUsernameForm(forms.ModelForm):
+class FindUsernameForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(FindUsernameForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
@@ -50,18 +39,9 @@ class FindUsernameForm(forms.ModelForm):
             
     def as_div(self):
         return SafeString(super().as_div().replace("<div>", "<div class='mb-3'>"))
-            
-    class Meta:
-        model = User
-        fields = ["first_name", "email"]
-        labels = {
-            "first_name": "이름",
-            "email": "이메일",
-        }
-        help_texts = {
-            "first_name": None,
-            "email": None,
-        }
+    
+    first_name = forms.CharField(label="이름")
+    email = forms.EmailField(label="이메일")
 
 # 비밀번호 초기화
 class ResetPasswordForm(forms.Form):
@@ -78,7 +58,7 @@ class ResetPasswordForm(forms.Form):
     email = forms.EmailField(label="이메일")
     
 # 정보 수정
-class ProfileForm(forms.ModelForm):
+class ProfileForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
@@ -87,14 +67,19 @@ class ProfileForm(forms.ModelForm):
     def as_div(self):
         return SafeString(super().as_div().replace("<div>", "<div class='mb-3'>"))
     
-    class Meta:
-        model = User
-        fields = ["first_name", "email"]
-        labels = {
-            "first_name": "이름",
-            "email": "이메일",
-        }
-        help_texts = {
-            "first_name": None,
-            "email": None,
-        }
+    first_name = forms.CharField(label="이름")
+    email = forms.EmailField(label="이메일")
+
+
+# 비밀번호 수정
+class PasswordForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super(PasswordForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs["class"] = "form-control"
+
+    def as_div(self):
+        return SafeString(super().as_div().replace("<div>", "<div class='mb-3'>"))
+    
+    password = forms.CharField(label="비밀번호", widget=forms.PasswordInput())
+    re_password = forms.CharField(label="비밀번호 확인", widget=forms.PasswordInput())

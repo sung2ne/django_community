@@ -2,33 +2,61 @@
 
 {% block content %}
 
+<div class="row">
+    <!-- 정보 수정 -->
+    <div class="col-md-4">
+        {% if profile_error_message %}
+        <div class="alert alert-danger" role="alert">{{ profile_error_message }}</div>
+        {% endif %}
 
-<!-- 정보 수정 -->
-<div class="col-md-4">
-    {% if profile_error_message %}
-    <div class="alert alert-danger" role="alert">{{ profile_error_message }}</div>
-    {% endif %}
+        {% if profile_success_message %}
+        <div class="alert alert-success" role="alert">{{ profile_success_message }}</div>
+        {% endif %}
 
-    {% if profile_success_message %}
-    <div class="alert alert-success" role="alert">{{ profile_success_message }}</div>
-    {% endif %}
-
-    <div class="card">
-        <div class="card-header">
-            정보 수정
+        <div class="card">
+            <div class="card-header">
+                정보 수정
+            </div>
+            <form id="profileForm" action="{% url 'common:profile' %}" method="post">
+                {% csrf_token %}
+                <div class="card-body">
+                    {{ profile_form.as_div }}
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">정보 수정</button>
+                </div>
+            </form>
         </div>
-        <form id="profileForm" action="{% url 'common:profile' %}" method="post">
-            {% csrf_token %}
-            <div class="card-body">
-                {{ profile_form.as_div }}
-            </div>
-            <div class="card-footer">
-                <button type="submit" class="btn btn-primary">정보 수정</button>
-            </div>
-        </form>
     </div>
+    <!-- 정보 수정 -->
+
+    <!-- 비밀번호 수정 -->
+    <div class="col-md-4">
+        {% if password_error_message %}
+        <div class="alert alert-danger" role="alert">{{ password_error_message }}</div>
+        {% endif %}
+
+        {% if password_success_message %}
+        <div class="alert alert-success" role="alert">{{ password_success_message }}</div>
+        {% endif %}
+
+        <div class="card">
+            <div class="card-header">
+                비밀번호 수정
+            </div>
+            <form id="passwordForm" action="{% url 'common:password' %}" method="post">
+                {% csrf_token %}
+                <div class="card-body">
+                    {{ password_form.as_div }}
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">비밀번호 수정</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--// 비밀번호 수정 -->
 </div>
-<!-- 정보 수정 -->
 
 {% endblock %}
 
@@ -56,6 +84,45 @@
                 required: "필수 입력입니다.",
                 email: "올바른 형식의 이메일을 입력하세요."
             }
+        },
+        errorClass: "mt-2 text-danger",
+        highlight: function(element) {
+            $(element).addClass("is-invalid").removeClass("is-valid");
+        },
+        unhighlight: function(element) {
+            $(element).addClass("is-valid").removeClass("is-invalid");
+        },
+        submitHandler: function (form) {
+            form.submit();
+        }  
+    });
+
+    $("#passwordForm").validate({
+        rules: {
+            password: {
+                required: true,
+                minlength: 8,
+                maxlength: 20,
+            },
+            pre_assword: {
+                required: true,
+                minlength: 8,
+                maxlength: 20,
+                equalTo: "#password"
+            },
+        },
+        messages: {
+            password: {
+                required: "필수 입력입니다.",
+                minlength: jQuery.validator.format("8글자 이상, 20글자 이하로 입력해주세요."),
+                maxlength: jQuery.validator.format("8글자 이상, 20글자 이하로 입력해주세요."),
+            },
+            re_password: {
+                required: "필수 입력입니다.",
+                minlength: jQuery.validator.format("8글자 이상, 20글자 이하로 입력해주세요."),
+                maxlength: jQuery.validator.format("8글자 이상, 20글자 이하로 입력해주세요."),
+                equalTo: "비밀번호와 비밀번호 확인이 다릅니다."
+            },
         },
         errorClass: "mt-2 text-danger",
         highlight: function(element) {

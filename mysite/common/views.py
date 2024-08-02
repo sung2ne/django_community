@@ -1,9 +1,10 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-from common.forms import FindUsernameForm, LoginForm, RegisterForm, ResetPasswordForm, ProfileForm
+from common.forms import FindUsernameForm, LoginForm, RegisterForm, ResetPasswordForm, ProfileForm, PasswordForm
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.decorators import login_required
 
 
 # 메인 화면
@@ -60,6 +61,7 @@ def common_logout(request):
     return redirect("main_page")
     
 # 프로필, /common/profile/
+@login_required
 def common_profile(request):
     # 템플릿으로 넘겨줄 정보
     context = {}
@@ -87,17 +89,42 @@ def common_profile(request):
             request.user.save()
             
             context["profile_form"] = form
+            context["password_form"] = PasswordForm()
             context["profile_success_message"] = "사용자 정보를 수정하였습니다."
             return render(request, "common/profile.html", context)
         
     # 정보 수정 폼
-    form = ProfileForm(instance=request.user)
-    context["profile_form"] = form
+    context["profile_form"] = ProfileForm(initial={'first_name': request.user.first_name, 'email': request.user.email})
+    context["password_form"] = PasswordForm()
     return render(request, "common/profile.html", context)
     
 # 비밀번호 수정, /common/password/
+@login_required
 def common_password(request):
-    return HttpResponse('/common/password/')    
+    # 템플릿으로 넘겨줄 정보
+    context = {}
+        
+    if request.method == "POST":
+        # 비밀번호 수정 폼
+        form = PasswordForm(request.POST)
+        
+        # 넘어온 값 검증
+        if form.is_valid():
+            cd = form.cleaned_data
+            
+            # 사용자 정보 변경
+            request.user.set_password(cd["password"])
+            request.user.save()
+            
+            context["profile_form"] = ProfileForm(initial={'first_name': request.user.first_name, 'email': request.user.email})
+            context["password_form"] = PasswordForm()
+            context["password_success_message"] = "사용자 비밀번호를 수정하였습니다."
+            return render(request, "common/profile.html", context)
+        
+    # 비밀번호 수정 폼
+    context["profile_form"] = ProfileForm(initial={'first_name': request.user.first_name, 'email': request.user.email})
+    context["password_form"] = PasswordForm()
+    return render(request, "common/profile.html", context)
     
 # 회원가입, /common/register/
 def common_register(request):
