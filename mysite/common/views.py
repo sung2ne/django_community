@@ -73,10 +73,10 @@ def common_profile(request):
             cd = form.cleaned_data
             
             # 사용자 정보 조회
-            user = User.objects.filter(email=cd["email"])
+            exist_users = User.objects.exclude(pk=request.user.pk).filter(email=cd["email"])
             
             # 사용자 유무 확인    
-            if len(user) > 0:
+            if exist_users.exists():
                 context["profile_form"] = form
                 context["profile_error_message"] = "이미 등록된 이메일입니다."
                 return render(request, "common/profile.html", context)
@@ -185,7 +185,6 @@ def common_reset_password(request):
             
             # 사용자 정보 조회
             user = User.objects.filter(username=cd["username"], first_name=cd["first_name"], email=cd["email"])
-            print(user)
             
             # 사용자 유무 확인    
             if len(user) == 0:
