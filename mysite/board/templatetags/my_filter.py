@@ -1,6 +1,23 @@
+from datetime import datetime
 from django import template
+from django.utils import timezone
 
 register = template.Library()
+
+@register.filter
+def change_name(value):
+    if not value:
+        return ""
+    
+    return value[0] + "*" * (len(value) - 1)
+
+@register.filter
+def is_new(value):
+    if not isinstance(value, datetime):
+        return False
+    
+    now = timezone.now()
+    return value.date() == now.date()
 
 @register.filter
 def sub(value, arg):

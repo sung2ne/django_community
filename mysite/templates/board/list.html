@@ -29,7 +29,8 @@
         <tr class="table-primary">
             <th>번호</th>
             <th>제목</th>
-            <th>작성일</th>
+            <th>글쓴이</th>
+            <th>작성일시</th>
         </tr>
     </thead>
     <tbody>
@@ -38,8 +39,14 @@
             <tr>
                 <!-- 번호 = 전체개수 - 시작인덱스 - 현재인덱스 + 1 -->
                 <td>{{ board_list.paginator.count|sub:board_list.start_index|sub:forloop.counter0|add:1 }}</td>
-                <td>{{ board.title }}</td>
-                <td>{{ board.created_at }}</td>
+                <td>
+                    {% if board.created_at|is_new %}
+                        <span class="badge bg-danger">new</span>
+                    {% endif %}
+                    {{ board.title }}
+                </td>
+                <td>{{ board.author.first_name|change_name }}</td>
+                <td>{{ board.created_at|date:"Y-m-d H:i" }}</td>
             </tr>
         {% endfor %}
     {% else %}
