@@ -1,9 +1,30 @@
 {% extends "base.html" %}
 
+{% load my_filter %}
+
 {% block content %}
-<table class="table table-hover">
+<div class="row mb-3">
+    <div class="col-6">
+        <a class="btn btn-primary">등록하기</a>
+    </div>
+    <div class="col-6 d-flex justify-content-end">
+        <!-- 검색 -->
+        <form id="searchForm" method="get">
+            <div class="input-group">
+                <input type="text" class="form-control" name="keyword" placeholder="검색어">
+                <button type="submit" class="btn btn-primary">검색</button>
+            </div>
+        </form>
+        <!--// 검색 -->
+    </div>
+</div>
+
+
+
+
+<table class="table table-hover table-bordered">
     <thead>
-        <tr>
+        <tr class="table-primary">
             <th>번호</th>
             <th>제목</th>
             <th>작성일</th>
@@ -13,7 +34,8 @@
     {% if board_list %}
         {% for board in board_list %}
             <tr>
-                <td>{{ forloop.counter }}</td>
+                <!-- 번호 = 전체개수 - 시작인덱스 - 현재인덱스 + 1 -->
+                <td>{{ board_list.paginator.count|sub:board_list.start_index|sub:forloop.counter0|add:1 }}</td>
                 <td>{{ board.title }}</td>
                 <td>{{ board.created_at }}</td>
             </tr>
@@ -29,14 +51,18 @@
 <!-- 페이징 -->
 <nav>
     <ul class="pagination">
+        <!-- 처음 -->
+        {% if board_list.number > 4 %}
+        <li class="page-item">
+            <a class="page-link" href="?page=1">처음</a>
+        </li>
+        {% endif %}
+        <!--// 처음 -->
+
         <!-- 이전 페이지 -->
         {% if board_list.has_previous %}
             <li class="page-item">
                 <a class="page-link" href="?page={{ board_list.previous_page_number }}">이전</a>
-            </li>
-        {% else %}
-            <li class="page-item disabled">
-                <a class="page-link">이전</a>
             </li>
         {% endif %}
         <!--// 이전 페이지 -->
@@ -62,13 +88,16 @@
             <li class="page-item">
                 <a class="page-link" href="?page={{ board_list.next_page_number }}">다음</a>
             </li>
-        {% else %}
-            <li class="page-item disabled">
-                <a class="page-link">다음</a>
-            </li>
         {% endif %}
         <!--// 다음 페이지 -->
 
+        <!-- 마지막 -->
+        {% if board_list.number < board_list.paginator.num_pages|add:-3 %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ board_list.paginator.num_pages }}">마지막</a>
+        </li>
+        <!--// 마지막 -->
+        {% endif %}
     </ul>
 </nav>
 <!-- // 페이징 -->
