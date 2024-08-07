@@ -11,16 +11,18 @@
         <!-- 검색 -->
         <form id="searchForm" method="get">
             <div class="input-group">
-                <input type="text" class="form-control" name="keyword" placeholder="검색어">
+                <select class="form-select" name="where">
+                    <option value="title" {% if where == "title" %} selected{% endif %}>제목</option>
+                    <option value="content" {% if where == "content" %} selected{% endif %}>내용</option>
+                    <option value="all" {% if where == "all" %} selected{% endif %}>전체</option>
+                </select>
+                <input type="text" class="form-control" name="kw" placeholder="검색어" value="{{ kw }}">
                 <button type="submit" class="btn btn-primary">검색</button>
             </div>
         </form>
         <!--// 검색 -->
     </div>
 </div>
-
-
-
 
 <table class="table table-hover table-bordered">
     <thead>
@@ -42,7 +44,7 @@
         {% endfor %}
     {% else %}
         <tr>
-            <td colspan="2">내용이 없습니다.</td>
+            <td colspan="3">내용이 없습니다.</td>
         </tr>
     {% endif %}
     </tbody>
@@ -54,7 +56,7 @@
         <!-- 처음 -->
         {% if board_list.number > 4 %}
         <li class="page-item">
-            <a class="page-link" href="?page=1">처음</a>
+            <a class="page-link" href="?{% query_string page=1 %}">처음</a>
         </li>
         {% endif %}
         <!--// 처음 -->
@@ -62,7 +64,7 @@
         <!-- 이전 페이지 -->
         {% if board_list.has_previous %}
             <li class="page-item">
-                <a class="page-link" href="?page={{ board_list.previous_page_number }}">이전</a>
+                <a class="page-link" href="?{% query_string page=board_list.previous_page_number %}">이전</a>
             </li>
         {% endif %}
         <!--// 이전 페이지 -->
@@ -76,7 +78,7 @@
                 </li>
                 {% else %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                    <a class="page-link" href="?{% query_string page=page_number %}">{{ page_number }}</a>
                 </li>
                 {% endif %}
             {% endif %}
@@ -86,7 +88,7 @@
         <!-- 다음 페이지 -->
         {% if board_list.has_next %}
             <li class="page-item">
-                <a class="page-link" href="?page={{ board_list.next_page_number }}">다음</a>
+                <a class="page-link" href="?{% query_string page=board_list.next_page_number %}">다음</a>
             </li>
         {% endif %}
         <!--// 다음 페이지 -->
@@ -94,7 +96,7 @@
         <!-- 마지막 -->
         {% if board_list.number < board_list.paginator.num_pages|add:-3 %}
         <li class="page-item">
-            <a class="page-link" href="?page={{ board_list.paginator.num_pages }}">마지막</a>
+            <a class="page-link" href="?{% query_string page=board_list.paginator.num_pages %}">마지막</a>
         </li>
         <!--// 마지막 -->
         {% endif %}
