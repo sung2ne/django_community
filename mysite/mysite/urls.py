@@ -6,8 +6,12 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path("", common_views.main_page, name="main_page"),
+    path('summernote/', include('django_summernote.urls')),
     path("admin/", admin.site.urls),
     path("common/", include("common.urls")),
     path("common2/", include("common2.urls")),
     path("board/", include("board.urls")),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
