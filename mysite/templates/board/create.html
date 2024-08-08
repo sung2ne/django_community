@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 
+{% load crispy_forms_tags %}
 {% load my_filter %}
 
 {% block content %}
 <form id="createForm" method="post">
     {% csrf_token %}
-    {{ form.as_div }}
+    {{ form|crispy }}
     <div class="row">
         <div class="col">
             <button type="submit" class="btn btn-primary">등록</button>

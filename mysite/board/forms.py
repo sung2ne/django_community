@@ -4,6 +4,7 @@ from board.models import Board
 
 # 등록
 class CreateForm(forms.ModelForm):
+    """
     def __init__(self, *args, **kwargs):
         super(CreateForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
@@ -11,6 +12,7 @@ class CreateForm(forms.ModelForm):
             
     def as_div(self):
         return SafeString(super().as_div().replace("<div>", "<div class='mb-3'>"))
+    """
     
     class Meta:
         model = Board
