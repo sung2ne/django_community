@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% load my_filter %}
+
+{% block content %}
+<form id="createForm" method="post">
+    {% csrf_token %}
+    {{ form.as_div }}
+    <div class="row">
+        <div class="col">
+            <button type="submit" class="btn btn-primary">등록</button>
+        </div>
+        <div class="col d-flex justify-content-end">
+            <a href="{% url 'board:list' %}?{% query_string page=page %}" class="btn btn-danger">취소</a>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block script %}
+<script>
+    $("#createForm").validate({
+        rules: {
+            title: {
+                required: true,
+            },
+            content: {
+                required: true,
+            },
+        },
+        messages: {
+            title: {
+                required: "제목을 입력해주세요.",
+            },
+            content: {
+              required: "내용을 입력해주세요.",
+            }
+        },
+        errorClass: "mt-2 text-danger",
+        highlight: function(element) {
+            $(element).addClass("is-invalid").removeClass("is-valid");
+        },
+        unhighlight: function(element) {
+            $(element).addClass("is-valid").removeClass("is-invalid");
+        },
+        submitHandler: function (form) {
+            form.submit();
+        }  
+    });
+</script>
+{% endblock %}

@@ -1,8 +1,9 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.core.paginator import Paginator
 from django.db.models import Q
 from board.models import Board
+from board.forms import CreateForm
 
 # 목록, /board/
 def board_list(request):
@@ -41,3 +42,37 @@ def board_list(request):
         "page": page,
     }
     return render(request, "board/list.html", context)
+
+
+# 등록, /board/create/
+def board_create(request):
+    # 페이지 번호
+    page = request.GET.get("page", 1)
+    
+    # 등록 폼   
+    form = CreateForm()
+    
+    # 템플릿으로 넘겨줄 정보
+    context = {
+        "page": page,
+        "form": form,
+    }
+    
+    # POST
+    if request.method == "POST":       
+        # 등록 폼   
+        form = CreateForm(request.POST)
+        
+        # 넘어온 값 검증
+        if form.is_valid():
+            cd = form.cleaned_data
+            
+            # 등록하기
+            b = Board.objects.create(title=cd["title"], content=cd["content"], author=request.user)
+            b.save()
+            
+            # 목록으로 이동
+            return redirect("board:list")
+    
+    # 등록 화면
+    return render(request, "board/create.html", context)
