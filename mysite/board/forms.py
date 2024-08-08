@@ -1,6 +1,7 @@
 from django import forms
 from django.utils.safestring import SafeString
 from board.models import Board
+from django_ckeditor_5.fields import CKEditor5Field
 
 # 등록
 class CreateForm(forms.ModelForm):
@@ -13,6 +14,9 @@ class CreateForm(forms.ModelForm):
     def as_div(self):
         return SafeString(super().as_div().replace("<div>", "<div class='mb-3'>"))
     """
+    
+    # content = forms.CharField(widget=CKEditorWidget())
+    content = CKEditor5Field('Text', config_name='extends')
     
     class Meta:
         model = Board

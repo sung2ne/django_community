@@ -2,6 +2,8 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.contrib import messages
+from django.utils.safestring import mark_safe
 from board.models import Board
 from board.forms import CreateForm
 
@@ -73,6 +75,9 @@ def board_create(request):
             
             # 목록으로 이동
             return redirect("board:list")
+    
+    # messages.error(request, mark_safe("오류입니다.<br>다시하세요."))
+    # messages.success(request, mark_safe("성공입니다.<br>다시하세요."))
     
     # 등록 화면
     return render(request, "board/create.html", context)
