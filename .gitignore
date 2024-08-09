@@ -1,4 +1,5 @@
 .conda
+.env
 
 # Created by https://www.toptal.com/developers/gitignore/api/windows,linux,macos,python,visualstudiocode,pycharm+all
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,linux,macos,python,visualstudiocode,pycharm+all
