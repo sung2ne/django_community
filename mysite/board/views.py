@@ -89,8 +89,16 @@ def board_create(request):
         if form.is_valid():
             cd = form.cleaned_data
             
+            # 요약하기
+            content_summary = summary(cd["content"])
+            
             # 등록하기
-            b = Board.objects.create(title=cd["title"], content=cd["content"], author=request.user)
+            b = Board.objects.create(
+                title=cd["title"], 
+                content=cd["content"], 
+                summary = content_summary,
+                author=request.user
+            )
             b.save()
             
             # 메시지
@@ -168,9 +176,13 @@ def board_update(request, board_id):
         if form.is_valid():
             cd = form.cleaned_data
             
+            # 요약하기
+            content_summary = summary(cd["content"])
+            
             # 수정하기
             b.title = cd["title"]
-            b.content=cd["content"]
+            b.content = cd["content"]
+            b.summary = content_summary
             b.save()
             
             # 메시지

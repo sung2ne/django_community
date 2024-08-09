@@ -45,9 +45,13 @@
                         <span class="badge bg-danger">new</span>
                     {% endif %}
                     <a href="{% url 'board:read' board.id %}?{% query_string page=page %}">{{ board.title }}</a>
+                    <span class="ms-3 badge bg-success" data-bs-toggle="collapse" data-bs-target="#summary{{ board.id }}" aria-expanded="true" aria-controls="summary{{ board.id }}">요약보기</span>
                 </td>
                 <td>{{ board.author.first_name|change_name }}</td>
                 <td>{{ board.created_at|date:"Y-m-d H:i" }}</td>
+            </tr>
+            <tr id="summary{{ board.id }}" class="accordion-collapse collapse">
+                <td colspan="4">{{ board.summary }}</td>
             </tr>
         {% endfor %}
     {% else %}
