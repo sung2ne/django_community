@@ -21,7 +21,7 @@
     </div>
     {% if board.author.username == user.username %}
     <div class="col d-flex justify-content-end">
-        <a href="#" class="btn btn-warning me-3">수정</a>
+        <a href="{% url 'board:update' board.id %}?{% query_string %}" class="btn btn-warning me-3">수정</a>
         <button class="btn btn-danger" id="btnDelete">삭제</button>
     </div>
     {% endif %}

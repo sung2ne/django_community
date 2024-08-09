@@ -77,7 +77,7 @@ def board_create(request):
             # 메시지
             messages.success(request, "게시글이 등록되었습니다.")
             
-            # 목록으로 이동
+            # 보기로 이동
             return redirect("board:read", b.id)    
     
     # 등록 화면
@@ -116,3 +116,49 @@ def board_delete(request, board_id):
     
     # 목록으로 이동
     return redirect("board:list")
+
+# 수정, /board/<board_id/update/
+def board_update(request, board_id):
+    # 게시글
+    b = get_object_or_404(Board, pk=board_id)
+    
+    # 수정 권한 확인
+    if request.user.username != b.author.username:
+        logout(request)
+        return redirect("main_page")
+    
+    # 페이지 번호
+    page = request.GET.get("page", 1)
+    
+    # 수정 폼   
+    form = CreateForm(instance=b)
+    
+    # 템플릿으로 넘겨줄 정보
+    context = {
+        "page": page,
+        "form": form,
+        "board": b,
+    }
+    
+    # POST
+    if request.method == "POST":       
+        # 수정 폼   
+        form = CreateForm(request.POST)
+        
+        # 넘어온 값 검증
+        if form.is_valid():
+            cd = form.cleaned_data
+            
+            # 수정하기
+            b.title = cd["title"]
+            b.content=cd["content"]
+            b.save()
+            
+            # 메시지
+            messages.success(request, "게시글이 수정되었습니다.")
+            
+            # 보기로 이동
+            return redirect("board:read", b.id)    
+    
+    # 수정 화면
+    return render(request, "board/update.html", context)
