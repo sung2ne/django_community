@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib import messages
@@ -81,3 +81,18 @@ def board_create(request):
     
     # 등록 화면
     return render(request, "board/create.html", context)
+
+# 보기
+def board_read(request, board_id):
+    # 페이지 번호
+    page = request.GET.get("page", 1)
+    
+    # 게시글
+    b = get_object_or_404(Board, pk=board_id)
+    
+    context = {
+        "page": page,
+        "board": b,    
+    }
+    
+    return render(request, "board/read.html", context)

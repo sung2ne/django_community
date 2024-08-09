@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load my_filter %}
+
+{% block content %}
+<div class="card mb-3">
+    <div class="card-header">
+        {{ board.title }}
+    </div>
+    <div class="card-body">
+        <div class="mb-3">
+            작성자: {{ board.user.username|change_name }},  작성일: {{ board.created_at|date:"Y-m-d H:i" }}
+        </div>
+        <div>{{ board.content|safe }}</div>
+    </div>    
+</div>
+<div class="row">
+    <div class="col">
+        <a href="{% url 'board:list' %}?{% query_string page=page %}" class="btn btn-primary">목록</a>
+    </div>
+    <div class="col d-flex justify-content-end">
+        <a href="#" class="btn btn-warning me-3">수정</a>
+        <a href="#" class="btn btn-danger">삭제</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

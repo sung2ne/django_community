@@ -44,7 +44,7 @@
                     {% if board.created_at|is_new %}
                         <span class="badge bg-danger">new</span>
                     {% endif %}
-                    {{ board.title }}
+                    <a href="{% url 'board:read' board.id %}?{% query_string page=page %}">{{ board.title }}</a>
                 </td>
                 <td>{{ board.author.first_name|change_name }}</td>
                 <td>{{ board.created_at|date:"Y-m-d H:i" }}</td>
