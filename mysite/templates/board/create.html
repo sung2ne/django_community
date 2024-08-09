@@ -5,18 +5,6 @@
 {% load my_filter %}
 
 {% block content %}
-<!-- 메시지 -->
-{% if messages %}
-    {% for message in messages %}
-        {% if message.tags == "error" %}
-            <div class="alert alert-danger">{{ message }}</div>
-        {% elif message.tags == "success" %}
-            <div class="alert alert-success">{{ message }}</div>
-        {% endif %}
-    {% endfor %}
-{% endif %}
-<!--// 메시지 -->
-
 <form id="createForm" method="post">
     {% csrf_token %}
     {{ form|crispy }}
